@@ -1,8 +1,10 @@
 # phys77-proj
 Physics 77 Capstone Project
 
-1	Fluid Dynamics		  Flow around a body, through a grate, etc <br/>
+Monde Carlo Simulation for an idealized (homogeneous and spherical) nuclear fission reactor.
 
-2	Nuclear Reactors		Why does U235 work? Show that certain parameters do not result in net energy gain <br/>
+Model:
 
-3	Redshift            Determining the cosmological constant through a code system that can engage with redshifts (that we've calculated) <br/>
+1. Neutrino travel, escape, and interactions (absorption, scattering, and fission)
+2. Criticality / Power production
+3. Antineutrino flux out of the reactor / Plutonium production
