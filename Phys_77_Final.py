@@ -13,29 +13,24 @@ from scipy.integrate import quad
 ##of if a random neutron can escape or not
 
 #Example montecarlo loop
-def MC_ND_Sphere(M,N,R):
-    Nreps = 100
-    #empty Volume array
-    V    = np.zeros((Nreps)) 
-    
-    #MonteCarlo Loop
-    for i in range(Nreps):
-        #empty position and radius arrays
-        D = np.ones((N,M))
-        Rad = np.zeros(M)
-        for p in range(N):
-            #populate positions & Calculate radii
-            D[p] = np.random.uniform(0,R,(1,M))
-            Rad = Rad + D[p]**2
-        #Calculate volume
-        V[i] = (R**N)*(2**N)*(Rad<(R**2)).sum()/M
-    
-        
-    RealVal = ((np.pi**(N/2))/(math.gamma(N/2 + 1)))*(R**N)
-    SimulatedVolume = np.mean(V)
-    StandardDeviation = np.std(V)
+import numpy as np
+import math
 
-    return SimulatedVolume,StandardDeviation , RealVal
+def MC_ND_Sphere(M, N, R):
+    mreps = 100
+    volumes = np.empty((mreps))
+    exact_volume = (np.pi**(N/2) * R**N) / math.gamma(N/2 + 1)
+    
+    for i in range(mreps):
+        points = np.random.uniform(-R, R, (M, N))
+        distances = np.linalg.norm(points, axis = 1)
+        inside_sphere = np.sum(distances < R)
+        volumes[i] = (2 * R)**N * (inside_sphere / M)
+
+    mean = np.mean(volumes)
+    std = np.std(volumes)
+
+    return mean, std, exact_volume
 
 
 # In[2]:
