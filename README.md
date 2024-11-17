@@ -12,11 +12,11 @@ Model:
 # Notes on readability:
 
 Comments should be lowercase and begin with a space
-
+    
     '# example comment'
 
 Inline comments should be tabbed at least once
 
-'#%%' used as a comment to separate sections of code within a single file
+Different comment to separate sections of code within a single file (also allows for python file to be run in blocks like a notebook)
 
-    Also allows for python file to be run in blocks (like a notebook)
+    '#%% defining initial conditions'
