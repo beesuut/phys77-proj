@@ -34,30 +34,30 @@ def pdf(x):
 def cdf(x):
     return quad(pdf, 0, x)[0]
 
-
 # from there we pick a random number from 0<y<1, and then we can use that as the y value for the cdf,
 # which then can tell us the distance the particle will travel
 
-inverse_cdf = inversefunc(cdf)
+fcount = 0
 
-tempvar = np.random.uniform(0,1)
+def escape(neut):
+    inverse_cdf = inversefunc(cdf)
 
-dist = inverse_cdf(tempvar)     # distance travelled before interaction
+    dist = inverse_cdf(np.random.uniform(0,1))     # distance travelled before interaction
 
+    # check if particle escapes
 
-#%% check if particle escapes
+    neut[:, 0] = np.add(neut[:, 0], dist * neut[:, 1])     # change neutron position by dist in movement direction
 
-neutron[:, 0] = np.add(neutron[:, 0], dist * neutron[:, 1])     # change neutron position by dist in movement direction
+    pos = np.linalg.norm(neut[:, 0], axis = 0)   # find final position
 
-pos = np.linalg.norm(neutron[:, 0], axis = 0)   # find final position
+    if pos <= 1:    # particle didn't leave
+        prob = np.random.randint(0, sf + si + se)
+        if prob < sf:   # probability of fission
+            # do a fission (NEED TO DO)
+            fcount += 1     # increase fission count
+            elif prob < (sf + se):  # probability of elastic collision
+            # change energy (NEED TO DO)
+            escape(neut)    # repeat until fission, absorption, or escape
+    # ignore absorption
 
-#%% 
-
-if pos <= 1:
-    prob = np.random.randint(0, sf + si + se)
-    if prob < sf:
-        # do a fission
-        elif prob < (sf + se):
-           # change energy
-
-# ignore absorption
+escape(neutron)
