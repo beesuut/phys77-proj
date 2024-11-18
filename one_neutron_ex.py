@@ -64,7 +64,7 @@ def escape(neut):
     pos = np.linalg.norm(neut[:, 0], axis = 0)   # find final position
 
     if pos <= 1:    # particle didn't leave
-        prob = np.random.randint(0, sf*(10**24) + si*(10**24) + se*(10**24))
+        prob = np.random.uniform(0, sf*(10**24) + si*(10**24) + se*(10**24))
         if prob < sf:   # probability of fission
             # do a fission (NEED TO DO)
             fcount += 1     # increase fission count
