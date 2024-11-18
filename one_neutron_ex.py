@@ -11,6 +11,7 @@ from pynverse import inversefunc
 
 nenergy = 1     # ideally a random value between 5 ish different possibilities
 neutron = np.random.uniform(low=-1.0, high=1.0, size =(2,3))    # row 1: location; row 2: direction; columns for 3d
+neutron[:, 1] = neutron[:, 1] / np.sum(neutron[:, 1])   # direction vector has length 1
 
 # numbers for pure u238; nenergy = 1 MeV
 sf = 13     # mb fission
@@ -42,3 +43,21 @@ inverse_cdf = inversefunc(cdf)
 tempvar = np.random.uniform(0,1)
 
 dist = inverse_cdf(tempvar)     # distance travelled before interaction
+
+
+#%% check if particle escapes
+
+neutron[:, 0] = np.add(neutron[:, 0], dist * neutron[:, 1])     # change neutron position by dist in movement direction
+
+pos = np.linalg.norm(neutron[:, 0], axis = 0)   # find final position
+
+#%% 
+
+if pos <= 1:
+    prob = np.random.randint(0, sf + si + se)
+    if prob < sf:
+        # do a fission
+        elif prob < (sf + se):
+           # change energy
+
+# ignore absorption
