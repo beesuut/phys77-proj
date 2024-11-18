@@ -9,19 +9,26 @@ from pynverse import inversefunc
 
 # initialize a neutron with a random direction, energy, and location
 
-nenergy = 1     # ideally a random value between 5 ish different possibilities
+nenergy = 2     # 2 is a fast/high energy neutron, all neutrons are made this way
 neutron = np.random.uniform(low=-1.0, high=1.0, size =(2,3))    # row 1: location; row 2: direction; columns for 3d
-neutron[:, 1] = neutron[:, 1] / np.sum(neutron[:, 1])   # direction vector has length 1
+neutron[1,:] = neutron[1, :] / ((np.sum((neutron[1, :])**2))**0.5)    # direction vector has length 1
+
+#convert the spherical coordinates to cartesian coordinates
+ρ = neutron[0,0]
+φ = neutron[0,1]*np.pi
+θ = neutron[0,2]*np.pi
+
+neutron[0,:] = [ρ*np.sin(φ)*np.cos(θ),ρ*np.sin(φ)*np.sin(θ),ρ*np.cos(φ)]
 
 # numbers for pure u238; nenergy = 1 MeV
-sf = 13     # mb fission
-si = 1300   # mb inelastic
-se = 4000   # mb elastic 
+sf = 0.013* (10**(-24))     # cm^2 crossection fission
+si = 1.300* (10**(-24))    # cm^2 crossection inelastic
+se = 4.000* (10**(-24))    # cm^2 crossection elastic 
 
-# the total crossection is just the sum of the fission, absorbtion (inelastic) and scattering (elastic) crossections
-stot = 1   # sf+si+se    I tried this but it gave numbers too low, so I think something is off
+# the total crossection is just the sum of the crossections
+stot = sf+si+se  #  I tried this but it gave numbers too low, so I think something is off
 
-n = 1   # densisty = 19.05 #g/cm3 ^^same issue^^
+n = 4.98*(10**22) #atoms/cm^3
 
 #%% probability of escape
 
@@ -38,8 +45,14 @@ def cdf(x):
 # which then can tell us the distance the particle will travel
 
 fcount = 0
+acount = 0
+ecount = 0
 
 def escape(neut):
+    global fcount
+    global acount
+    global ecount
+    
     inverse_cdf = inversefunc(cdf)
 
     dist = inverse_cdf(np.random.uniform(0,1))     # distance travelled before interaction
@@ -51,13 +64,20 @@ def escape(neut):
     pos = np.linalg.norm(neut[:, 0], axis = 0)   # find final position
 
     if pos <= 1:    # particle didn't leave
-        prob = np.random.randint(0, sf + si + se)
+        prob = np.random.randint(0, sf*(10**24) + si*(10**24) + se*(10**24))
         if prob < sf:   # probability of fission
             # do a fission (NEED TO DO)
             fcount += 1     # increase fission count
-            elif prob < (sf + se):  # probability of elastic collision
-            # change energy (NEED TO DO)
+        elif prob < (sf + se):  # probability of elastic collision
+            # change energy if colliding with a light particle(NEED TO DO)
             escape(neut)    # repeat until fission, absorption, or escape
-    # ignore absorption
+        else: 
+            acount = 1
+    else:
+        ecount +=1
+
 
 escape(neutron)
+print(fcount)
+print(acount)
+print(ecount)
