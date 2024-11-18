@@ -1,10 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
+#%% crude montecarlo
 
-# In[373]:
-
-
-#crude montecarlo 
+import numpy as np
+from one_neutron_ex import escape
 
 fcount = 0
 acount = 0
@@ -29,10 +26,3 @@ print(fcount)
 print(acount)
 print(ecount)
 print(scount)
-
-
-# In[ ]:
-
-
-
-

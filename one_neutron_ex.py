@@ -1,7 +1,6 @@
 #%% working single particle model before monte-carlo
 
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.integrate import quad
 from pynverse import inversefunc
 
@@ -28,11 +27,13 @@ nenergy = 1     # 1 is a fast/high energy neutron, all neutrons are made this wa
 neutron = np.random.uniform(low=-1.0, high=1.0, size =(2,3))    # row 1: location; row 2: direction; columns for 3d
 neutron[1,:] = neutron[1, :] / ((np.sum((neutron[1, :])**2))**0.5)    # direction vector has length 1
 
-#convert the spherical coordinates to cartesian coordinates
-ρ = neutron[0,0]*radiusofreactor
-φ = neutron[0,1]*np.pi
-θ = neutron[0,2]*np.pi
-neutron[0,:] = [ρ*np.sin(φ)*np.cos(θ),ρ*np.sin(φ)*np.sin(θ),ρ*np.cos(φ)]
+# define position in spherical coordinates
+rho = neutron[0,0]*radiusofreactor
+phi = neutron[0,1]*np.pi
+theta = neutron[0,2]*np.pi*2
+
+# convert to cartesian coordinates
+neutron[0,:] = [rho*np.sin(phi)*np.cos(theta),rho*np.sin(phi)*np.sin(theta),rho*np.cos(phi)]
 
 
 
@@ -50,7 +51,6 @@ def cdf(x):
 # from there we pick a random number from 0<y<1, and then we can use that as the y value for the cdf,
 # which then can tell us the distance the particle will travel
 
-
 def escape(neut):
     global fcount
     global acount
@@ -64,9 +64,9 @@ def escape(neut):
 
     # check if particle escapes
 
-    neut[:, 0] = np.add(neut[:, 0], dist * neut[:, 1])     # change neutron position by dist in movement direction
+    neut[0, :] = np.add(neut[0, :], dist * neut[1, :])     # change neutron position by dist in movement direction
 
-    pos = np.linalg.norm(neut[:, 0], axis = 0)   # find final position
+    pos = np.linalg.norm(neut[0, :], axis = 0)   # find final position
 
     if pos <= radiusofreactor:    # particle didn't leave
         prob = np.random.uniform(0, stot*(10**24))
