@@ -32,10 +32,10 @@ n = 4.98*(10**22) #count/cm^3
 
 #%% probability of escape
 
-# for a particle density of "n" and a cross section of "s", the free path pdf is given by: 1/ns * e^-x/ns
+# for a particle density of "n" and a cross section of "s", the free path pdf is given by: ns * e^-xns
 
 def pdf(x):
-    return (1/(n*stot)*np.exp(-x/(n*stot)))
+    return ((n*stot)*np.exp(-x*(n*stot)))
 
 # integrate the pdf to get a cdf that goes from 0<y<1
 def cdf(x):
