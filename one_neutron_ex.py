@@ -26,9 +26,9 @@ si = 1.300* (10**(-24))    # cm^2 crossection inelastic
 se = 4.000* (10**(-24))    # cm^2 crossection elastic 
 
 # the total crossection is just the sum of the crossections
-stot = sf+si+se  #  I tried this but it gave numbers too low, so I think something is off
+stot = sf+si+se 
 
-n = 4.98*(10**22) #atoms/cm^3
+n = 4.98*(10**22) #count/cm^3
 
 #%% probability of escape
 
