@@ -22,7 +22,6 @@ se = 4.000 * (10 ** (-24))  # cm^2 crossection elastic
 n = 4.98 * (10**22)  # atoms/cm^3
 stot = (sf + si + se)  # the total crossection is just the sum of the crossections
 
-
 # initialize a neutron with a random direction, energy, and location
 
 nenergy = 1  # 1 is a fast/high energy neutron, all neutrons are made this way
@@ -61,6 +60,7 @@ def pdf(x):
 def cdf(x):
     return quad(pdf, 0, x)[0]
 
+inverse_cdf = inversefunc(cdf)
 
 # from there we pick a random number from 0<y<1, and then we can use that as the y value for the cdf,
 # which then can tell us the distance the particle will travel
@@ -71,8 +71,6 @@ def escape(neut):
     global acount
     global ecount
     global scount
-
-    inverse_cdf = inversefunc(cdf)
 
     dist = np.empty(count)
 
