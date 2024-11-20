@@ -1,5 +1,5 @@
 from initialize_neutrons import *
-from checkescape import *
+from check_escape import *
 
 reactorradius = 1 # cm
 

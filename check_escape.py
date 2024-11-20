@@ -26,7 +26,6 @@ def escape(neutron, count, reactorradius, se, si, stot):
             elif prob < (se + si) * (10**24):  # probability of inelastic collision
                 acount += 1
             else:
-                # do a fission (NEED TO DO)
                 fcount += 1  # increase fission count
         else:
             ecount += 1
