@@ -9,7 +9,7 @@ def escape(neutron, count, reactorradius, se, si, stot):
     global scount
 
     dist = np.empty(count)
-    dist = np.array(list((map(lambda x:(inverse_cdf(np.random.uniform(0, 1)).item()), dist))))  # distance travelled before interaction
+    dist = np.array(list((map(lambda x:(inv(np.random.uniform(0, 1)).item()), dist))))  # distance travelled before interaction
 
     # check if particle escapes
     neutron[0, :1] = np.add(neutron[0, :1], dist * neutron[1, :1])  # change neutron position by dist in movement direction
