@@ -15,4 +15,6 @@ def cdf(x):
 
 # pick a random number from 0-1 to use as the y value for the cdf
 # gives the distance the particle will travel
-inverse_cdf = inversefunc(cdf)
+def inv(y, n, stot):
+    temperary = inversefunc(cdf, args=(n, stot))
+    return temperary(y)
