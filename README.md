@@ -24,5 +24,6 @@ Different comment to separate sections of code within a single file (also allows
 5. Adjust density functions to be able to account for different energy states / crossections
 
 # Interesting To-Do:
-1. Calculate power production, antineutrino flux, plutonium production
-2. Create graphs of neutrons v fissions (for different elements) (for different atom densities)
+1. Calculate power production, antineutrino flux
+2. Plutonium production + decay
+3. Create graphs of neutrons v fissions (for different elements) (for different atom densities)
