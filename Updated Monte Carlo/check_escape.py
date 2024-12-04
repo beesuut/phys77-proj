@@ -31,6 +31,7 @@ def escape(neutron, count, reactorradius, sa, ss, stot, n):
         else:  # particle left reactor (neutron `gone`)
             ecount += 1
 
+    # re-run function for remaining neutrons from elastic collisions
     newneutrons = newneutrons[~np.all(newneutrons == 0, axis=2)]
     newcount = newneutrons.size(axis = 2)
     if newcount != 0:
