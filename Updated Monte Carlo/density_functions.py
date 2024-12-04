@@ -3,7 +3,7 @@ from scipy.integrate import quad
 from pynverse import inversefunc
 
 
-# for a particle density of "n" and a cross section of "s", the free path pdf is given by: ns * e^-xns
+# for a particle density of "n" and a cross section total of "stot", the free path pdf is given by: ns * e^-xns
 def pdf(x, n, stot):
     return (n * stot) * np.exp(-x * (n * stot))
 
