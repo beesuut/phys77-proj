@@ -10,7 +10,13 @@ def escape(neutron, count, reactorradius, sa, ss, stot, n):
 
     dist = np.empty(count)
     #dist = np.array(list((map(lambda x:(inv((np.random.uniform(0, 1)), n, stot).item()), dist))))  # distance travelled before interaction
-    dist = np.array(list((map(lambda x:(inv((np.random.uniform(0, 1)), n, stotFAST)) if neutron[2,0] == 1 else (inv((np.random.uniform(0, 1)), n, stotSLOW)), dist))))
+    #dist = np.array(list((map(lambda x:(inv((np.random.uniform(0, 1)), n, stotFAST)) if neutron[2,0] == 1 else (inv((np.random.uniform(0, 1)), n, stotSLOW)), dist))))
+    for i in neutron:
+        if neutron[2, 0, i] == 1:
+            dist[i] = lambda x:(inv((np.random.uniform(0, 1)), n, stotFAST))
+        else:
+            dist[i] = lambda x:(inv((np.random.uniform(0, 1)), n, stotSLOW))
+        i+=1
     # check if particle escapes
     #UPDATE THE PARAM NAMES FOR STOTFAST AND STOTSLOW
 
