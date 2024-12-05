@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 
 # unpack data from csv
-Materials = pd.read_csv('MaterialsSheet.csv')
+materials = pd.read_csv('MaterialsSheet.csv')
 
-numden = Materials['numden'].to_numpy()    # extract specifically the numerical densities of each material for later use
-materials = Materials.iloc[0:, 1:7].to_numpy()    # extract the rest of the data from the DataFrame
+numden = materials['numden'].to_numpy()    # extract specifically the numerical densities of each material for later use
+materials = materials.iloc[0:, 1:7].to_numpy()    # extract the rest of the data from the DataFrame
 
 # establish function to be used in comprehensive_monte_carlo
 def mixture(u238, u235, boron, hw):    # input volume percentages for each material
