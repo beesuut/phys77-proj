@@ -24,6 +24,7 @@ def mixture(u238, u235, boron, hw):    # input volume percentages for each mater
     
     f_stot = f_sf + f_sa + f_ss    # total fast cross-section
     s_stot = s_sf + s_sa + s_ss    # total slow cross-section
-    n = np.sum(eff_den) * (10**22)    # atoms/cm^3
+    n_per = eff_den * (10**22)    # atoms/cm^3 for each material
+    n = np.sum(n_per)    # total atoms/cm^3
     
-    return prpl_cs, f_sf, f_sa, f_ss, s_sf, s_sa, s_ss, f_stot, s_stot, n
+    return prpl_cs, f_sf, f_sa, f_ss, s_sf, s_sa, s_ss, f_stot, s_stot, n_per, n
