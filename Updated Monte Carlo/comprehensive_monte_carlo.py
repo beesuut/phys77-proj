@@ -1,5 +1,6 @@
 from initialize_neutrons import *
 from check_escape import *
+from materials_mixture import *
 
 reactorradius = 1  # cm
 
