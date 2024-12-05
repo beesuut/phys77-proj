@@ -8,8 +8,8 @@ def pdf(x, n, stot):
     return (n * stot) * np.exp(-x * (n * stot))
 
 # integrate the pdf to get a cdf that goes from 0<y<1
-def cdf(x):
-    return quad(pdf, 0, x)[0]
+def cdf(x, n, stot):
+    return quad(pdf, 0, x, args=(n,stot))[0]
 
 # pick a random number from 0-1 to use as the y value for the cdf
 # gives the distance the particle will travel
