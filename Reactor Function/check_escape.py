@@ -1,12 +1,7 @@
 import numpy as np
 from density_functions import inv
 
-# event counters
-fcount = 0      # fission
-acount = 0      # absorption
-scount = 0      # scattering
-ecount = 0      # escape
-
+# first function to run through all the possible reaction in the reactor to get counts of which occur
 def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, prpl_cs, n):
     
     # allow global event counters to update
@@ -65,4 +60,26 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
     if newcount != 0:
         escape(newneutrons, newcount, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, prpl_cs, n)
         
+    return fcount, acount, scount, ecount
+
+
+# second function with purpose of running the first function, but reseting all the global counts first to allow multiple non-accumulative uses
+def baseline_escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, prpl_cs, n):
+    
+    # ties function into global counts
+    global fcount
+    global acount
+    global scount
+    global ecount
+    
+    # resets event counters
+    fcount = 0      # fission
+    acount = 0      # absorption
+    scount = 0      # scattering
+    ecount = 0      # escape
+    
+    # runs escape function and returns outputs
+    fcount, acount, scount, ecount = \
+        escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, prpl_cs, n)
+    
     return fcount, acount, scount, ecount
