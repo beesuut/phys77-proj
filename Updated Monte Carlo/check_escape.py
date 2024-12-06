@@ -1,6 +1,6 @@
 from density_functions import *
 
-def escape(neutron, count, reactorradius, sa, ss, stot, n):
+def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, n):
 
     # allow global event counters to update
     global fcount
@@ -8,31 +8,27 @@ def escape(neutron, count, reactorradius, sa, ss, stot, n):
     global scount
     global ecount
 
-    dist = np.empty(count)
-    #dist = np.array(list((map(lambda x:(inv((np.random.uniform(0, 1)), n, stot).item()), dist))))  # distance travelled before interaction
-    #dist = np.array(list((map(lambda x:(inv((np.random.uniform(0, 1)), n, stotFAST)) if neutron[2,0] == 1 else (inv((np.random.uniform(0, 1)), n, stotSLOW)), dist))))
-    for i in neutron:
-        if neutron[2, 0, i] == 1:
-            dist[i] = lambda x:(inv((np.random.uniform(0, 1)), n, stotFAST))
-        else:
-            dist[i] = lambda x:(inv((np.random.uniform(0, 1)), n, stotSLOW))
-        i+=1
+    dist = np.arange(0,count)
+
+    dist = np.array(list((map(lambda x:inv((np.random.uniform(0, 1)), n, f_stot) if neutron[2,0,int(x)] == 1 else inv((np.random.uniform(0, 1)), n, s_stot), dist))))    # distance travelled before interaction
     # check if particle escapes
-    #UPDATE THE PARAM NAMES FOR STOTFAST AND STOTSLOW
 
     neutron[0] = np.add(neutron[0], dist * neutron[1])  # change neutron position by dist in movement direction
     rad = np.linalg.norm(neutron[0], axis=0)  # find final position
 
-    newneutrons = np.zeroes((3, 3, count))
+    newneutrons = np.zeros((3, 3, count))
 
     for i in range(count):
-         if neutron[2,0,i] == 1:
+        if neutron[2,0,i] == 1:
             if rad[i] <= reactorradius:  # particle didn't leave
-                prob = np.random.uniform(0, stot * (10**24))
-                if prob < ss * (10**24):  # probability of elastic collision (need to account for neutron)
+                prob = np.random.uniform(0, f_stot * (10**24))
+                if prob < f_ss * (10**24):  # probability of elastic collision (need to account for neutron)
                     newneutrons[:, :, i] = neutron[:, :, i]
+                    tempprob = np.random.uniform(0, np.sum(prpl_cs[:,2]))
+                    if tempprob < (prpl_cs[:,2][1]+prpl_cs[:,2][0]):
+                        newneutrons[:,:,i][2,0] = 0
                     scount += 1
-                elif prob < (ss + sa) * (10**24):  # probability of inelastic collision (neutron `gone`)
+                elif prob < (f_ss + f_sa) * (10**24):  # probability of inelastic collision (neutron `gone`)
                     acount += 1
                 else: # fission occurs (neutron `gone`)
                     fcount += 1
@@ -40,11 +36,11 @@ def escape(neutron, count, reactorradius, sa, ss, stot, n):
                 ecount += 1
         else:
             if rad[i] <= reactorradius:  # particle didn't leave
-                prob = np.random.uniform(0, stot * (10**24))
-                if prob < ss * (10**24):  # probability of elastic collision (need to account for neutron)
+                prob = np.random.uniform(0, s_stot * (10**24))
+                if prob < s_ss * (10**24):  # probability of elastic collision (need to account for neutron)
                     newneutrons[:, :, i] = neutron[:, :, i]
                     scount += 1
-                elif prob < (ss + sa) * (10**24):  # probability of inelastic collision (neutron `gone`)
+                elif prob < (s_ss + s_sa) * (10**24):  # probability of inelastic collision (neutron `gone`)
                     acount += 1
                 else: # fission occurs (neutron `gone`)
                     fcount += 1
