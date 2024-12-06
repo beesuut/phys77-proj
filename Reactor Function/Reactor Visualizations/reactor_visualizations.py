@@ -94,3 +94,23 @@ def criticality_neutrons(n_max):
     
     plt.savefig('criticality.png')
     plt.show()
+
+def antineutrinos(num, area):
+    prpl_cs, f_sf, f_sa, f_ss, s_sf, s_sa, s_ss, f_stot, s_stot, n_per, n = mixture(0.4, 0.1, 0, 0.5)
+    fcount, acount, scount, ecount = reactor(num, 0.4, 0.1, 0, 0.5)
+    
+    antineutrinocount = 6*fcount+ 1.5*((prpl_cs[0,1] / np.sum(prpl_cs[:,1])) + (prpl_cs[1,1] / np.sum(prpl_cs[:,1]))+ (prpl_cs[0,3] / np.sum(prpl_cs[:,3]))+ (prpl_cs[1,3] / np.sum(prpl_cs[:,3])))/2
+    
+    #for a 1 sq meter detector, this is how many antineutrinos will hit it
+    flux = []
+    for r in range(1, 101):
+        numberhit = (((np.arctan(np.sqrt(area)/(2*r)))**2)/np.pi)*antineutrinocount/2
+        flux.append(numberhit)
+    
+    X = np.arange(1,101)
+    plt.plot(X, flux, color = 'red')
+    plt.title('Number of Antineutrinos incident on a detector - (with ' + str(area) + 'm^2 area)')
+    plt.xlabel('Distance from reactor (Meters)')
+    plt.ylabel('# of Antineutrinos detected')
+    plt.savefig('Neutrinos.png')
+    plt.show()
