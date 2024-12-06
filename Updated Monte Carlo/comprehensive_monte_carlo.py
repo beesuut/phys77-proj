@@ -34,7 +34,7 @@ nenergy_initial = np.ones(count)
 
 neutrons = neutrons(count, reactorradius, nenergy_initial) # initialize neutrons for monte carlo
 
-escape(neutrons, count, reactorradius, sa, ss, stot, n)  # runs overall function with inputs, giving outputs printed below
+escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, n)  # runs overall function with inputs, giving outputs printed below
 
 print('fission, absorption, scattering, escape')
 print(fcount, acount, scount, ecount)
