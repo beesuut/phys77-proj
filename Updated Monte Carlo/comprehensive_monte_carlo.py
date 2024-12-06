@@ -13,8 +13,8 @@ scount = 0      # scattering
 ecount = 0      # escape
 
 # mixture percentages (of total volume)
-u238 = 0.25  # uranium-235 
-u235 = 0.25  # uranium-238
+u238 = 0.25  # uranium-238 
+u235 = 0.25  # uranium-235
 boron = 0.25  # boron-10
 hw = 0.25  # heavy water
 
