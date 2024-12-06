@@ -30,7 +30,6 @@ mixture(u238, u235, boron, hw)  # outputs all needed atom totals and cross-secti
     # boron
     # hw
 
-
 nenergy_initial = np.ones(count)
 
 neutrons = neutrons(count, reactorradius, nenergy_initial) # initialize neutrons for monte carlo
