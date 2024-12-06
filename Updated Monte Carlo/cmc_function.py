@@ -25,6 +25,6 @@ def reactor(count, u238, u235, boron, hw, reactorradius = 1):
 
     neutrons = neutrons(count, reactorradius, nenergy_initial) # initialize neutrons for monte carlo
     
-    escape(__________________)  # runs overall function with inputs, giving outputs printed below
+    escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, n)  # runs overall function with inputs, giving outputs printed below
     
     return fcount, acount, scount, ecount
