@@ -26,20 +26,38 @@ def escape(neutron, count, reactorradius, sa, ss, stot, n):
     newneutrons = np.zeroes((3, 3, count))
 
     for i in range(count):
-        if rad[i] <= reactorradius:  # particle didn't leave
-            prob = np.random.uniform(0, stot * (10**24))
-            if prob < ss * (10**24):  # probability of elastic collision (need to account for neutron)
-                newneutrons[:, :, i] = neutron[:, :, i]
-                scount += 1
-            elif prob < (ss + sa) * (10**24):  # probability of inelastic collision (neutron `gone`)
-                acount += 1
-            else: # fission occurs (neutron `gone`)
-                fcount += 1
-        else:  # particle left reactor (neutron `gone`)
-            ecount += 1
+         if neutron[2,0,i] == 1:
+            if rad[i] <= reactorradius:  # particle didn't leave
+                prob = np.random.uniform(0, stot * (10**24))
+                if prob < ss * (10**24):  # probability of elastic collision (need to account for neutron)
+                    newneutrons[:, :, i] = neutron[:, :, i]
+                    scount += 1
+                elif prob < (ss + sa) * (10**24):  # probability of inelastic collision (neutron `gone`)
+                    acount += 1
+                else: # fission occurs (neutron `gone`)
+                    fcount += 1
+            else:  # particle left reactor (neutron `gone`)
+                ecount += 1
+        else:
+            if rad[i] <= reactorradius:  # particle didn't leave
+                prob = np.random.uniform(0, stot * (10**24))
+                if prob < ss * (10**24):  # probability of elastic collision (need to account for neutron)
+                    newneutrons[:, :, i] = neutron[:, :, i]
+                    scount += 1
+                elif prob < (ss + sa) * (10**24):  # probability of inelastic collision (neutron `gone`)
+                    acount += 1
+                else: # fission occurs (neutron `gone`)
+                    fcount += 1
+            else:  # particle left reactor (neutron `gone`)
+                ecount += 1
 
     # re-run function for remaining neutrons from elastic collisions
-    newneutrons = newneutrons[~np.all(newneutrons == 0, axis=2)]
-    newcount = newneutrons.size(axis = 2)
+    for i in range(np.size(newneutrons,axis=2)+1):
+        try :
+            while np.all(newneutrons[:,:,i]==0):
+                newneutrons = np.delete(newneutrons, i, axis=2)
+        except:
+            i +=1
+    newcount = np.size(newneutrons,axis=2)
     if newcount != 0:
         escape(newneutrons, newcount, reactorradius, sa, ss, stot)
