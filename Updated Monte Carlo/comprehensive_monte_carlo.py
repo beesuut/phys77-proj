@@ -19,6 +19,17 @@ boron = 0.25  # boron-10
 hw = 0.25  # heavy water
 
 mixture(u238, u235, boron, hw)  # outputs all needed atom totals and cross-sections
+# outputs:
+  # f_sf, f_sa, f_ss are summed fast cross-sections; f_stot is total
+  # s_sf, s_sa, s_ss are summed slow cross-sections; s_stot is total
+  # n is total number of atoms/cm^3 in the mixture; n_per is the atoms/cm^3 per material
+  # prpl_cs is an array of all the specific effective cross-sections for each material; the array is organized as:
+    #         f_sf  f_sa  f_ss  s_sf  s_sa  s_ss
+    # u238
+    # u235
+    # boron
+    # hw
+
 
 nenergy_initial = np.ones(count)
 
