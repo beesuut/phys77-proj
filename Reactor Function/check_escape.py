@@ -35,12 +35,7 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
                 else: # fission occurs (neutron `gone`)
                     fcount += 1
             else:  # particle left reactor (neutron `gone`)
-                anothertempprob = np.random.uniform(0, 1)
-                if anothertempprob < 0.5:
-                    newneutrons[:, :, i] = neutron[:, :, i]
-                    newneutrons[1,:,i] = [-x for x in newneutrons[1,:,i]]
-                else:
-                    ecount += 1
+                ecount += 1
         else:
             if rad[i] <= reactorradius:  # particle didn't leave
                 prob = np.random.uniform(0, s_stot * (10**24))
@@ -52,12 +47,7 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
                 else: # fission occurs (neutron `gone`)
                     fcount += 1
             else:  # particle left reactor (neutron `gone`)
-                anothertempprob = np.random.uniform(0, 1)
-                if anothertempprob < 0.5:
-                    newneutrons[:, :, i] = neutron[:, :, i]
-                    newneutrons[1,:,i] = [-x for x in newneutrons[1,:,i]]
-                else:
-                    ecount += 1
+                ecount += 1
 
     # re-run function for remaining neutrons from elastic collisions
     for i in range(np.size(newneutrons,axis=2)+1):
