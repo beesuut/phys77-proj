@@ -38,6 +38,7 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
                 anothertempprob = np.random.uniform(0, 1)
                 if anothertempprob < 0.5:
                     newneutrons[:, :, i] = neutron[:, :, i]
+                    newneutrons[1,:,i] = [-x for x in newneutrons[1,:,i]]
                 else:
                     ecount += 1
         else:
@@ -54,6 +55,7 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
                 anothertempprob = np.random.uniform(0, 1)
                 if anothertempprob < 0.5:
                     newneutrons[:, :, i] = neutron[:, :, i]
+                    newneutrons[1,:,i] = [-x for x in newneutrons[1,:,i]]
                 else:
                     ecount += 1
 
