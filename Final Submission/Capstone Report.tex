@@ -14,8 +14,13 @@
 
 The aim of this project was to effectively model a fission nuclear reactor using python. The general structure is as follows. Beginning with a set number of neutrons, a Monte Carlo simulation would be run to determine the number of fission, scattering, absorption, and escaped neutron events. Determining which events happen utilizes the cross-sections of the different materials in the reactor. A cross-section is a measure of area and can be used to determine the mean free path or the probability of an interaction happening, dependent on the particular elements involved and the energy of a given neutron. Using the cross-sections, cumulative density functions can be found which are used in the simulation. 
 
-With the number of different events, several interesting physical properties of the reactor can be calculated. Primarily, whether the reactor produces as many neutrons as it consumes; i.e. is the reactor critical. Other results included the number of antineutrinos the reactor produces, how much power the reactor produces, or how the criticality changes as the concentrations of materials are changed in the reactor.
+With the number of different events, several interesting physical properties of the reactor can be calculated. Primarily, whether the reactor produces as many neutrons as it consumes; i.e. is the reactor critical. Other results include (but are not limited to) the number of antineutrinos the reactor produces, how much power the reactor produces, or how the criticality changes as the concentrations of materials are changed in the reactor.
 
+\subsection*{Implementation}
+
+\subsubsection*{Our Process}
+
+Reaching our final desing took several iterations, as multiple hurdles had to be overcome before we reached a workable model. This process saw us first simulating a single neutron, turning this model into a crude Monte Carlo. As we worked towards a more polished model, we split our code into several interacting modules. These modules would first spawn a set number of neutrons into the simulation, process their interactions based on their cross-sections (probabilities), and produce counts of each event which occurred. These three modules, in order, may be referred to as the `neutrons' modeule (initialize\textunderscore neutrons), the `density' module (density\textunderscore functions), and the `escape' module (check\textunderscore escape). Finall a fourth `master' file would be used to bring each of these pieces together by initializing the reactor size, number of neutrons, the particular elements involved, and then running each of the modules.
 
 \nocite{*}
 \bibliography{Capstone_Citations}
