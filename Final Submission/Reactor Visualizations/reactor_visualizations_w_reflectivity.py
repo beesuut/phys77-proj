@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 from reactor_function_w_reflectivity import reactor
 
 # graphical function varying enrichment levels to see resulting neutron output and compare to criticality threshold, with neutrons and reactor radius as an input
-def criticality_enrichment(n, reactorradius):
+def criticality_enrichment(n, reflectivity, reactorradius):
     
     # initiate empty list to be filled with neutron outputs, ideally approaching chain reaction levels
     chain_reaction = []
     
     # run through reactor function at enrichment levels 1% to 100% 
     for i in range(1, 101):
-        fcount, acount, scount, ecount = reactor(n, 1-0.01*i, 0.01*i, 0, 0, 0.5, reactorradius)
+        fcount, acount, scount, ecount = reactor(n, 1-0.01*i, 0.01*i, 0, 0, reflectivity, reactorradius)
         chain_reaction.append(fcount*2.5)    # multiply fission count by average neutrons produced per fission
     
     # arrange percentages for x-axis
