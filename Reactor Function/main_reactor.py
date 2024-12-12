@@ -15,6 +15,7 @@ def reactor(count, u238, u235, boron, hw, reactorradius = 1):
 
     prpl_cs, f_sf, f_sa, f_ss, s_sf, s_sa, s_ss, f_stot, s_stot, n_per, n = mixture(u238, u235, boron, hw)  # outputs all needed atom totals and cross-sections
 
+    #All neutrons start with energy level = 1
     nenergy_initial = np.ones(count)
     
     neutron = neutrons(count, reactorradius, nenergy_initial) # initialize neutrons for monte carlo
