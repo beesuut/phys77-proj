@@ -26,7 +26,7 @@ def criticality_enrichment(n, reactorradius):
     plt.show()
 
 # graphical function varying radius, in cm, to see resulting neutron output and compare to criticality threshold, with neutrons as an input
-def criticality_radius(n):
+def criticality_radius_r(n):
     
     # initiate empty list to be filled with neutron outputs, ideally approaching chain reaction levels
     chain_reaction = []
