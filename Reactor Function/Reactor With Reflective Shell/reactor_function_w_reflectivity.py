@@ -1,6 +1,6 @@
 import numpy as np
 from initialize_neutrons import neutrons
-from check_escape import escape
+from check_escape_w_reflection import baseline_escape
 from materials_mixture import mixture
 
 #inputs:
@@ -11,17 +11,18 @@ from materials_mixture import mixture
     # hw = heavy water, as % of the total V
     # reatorradius = the cm radius of reactor, set at 1
 
-def reactor(count, u238, u235, boron, hw, reactorradius = 1):
-
-    prpl_cs, f_sf, f_sa, f_ss, s_sf, s_sa, s_ss, f_stot, s_stot, n_per, n = mixture(u238, u235, boron, hw)  # outputs all needed atom totals and cross-sections
-
-    #All neutrons start with energy level = 1
+def reactor(count, u238, u235, boron, hw, reflectivity = 0.5, reactorradius = 1):
+    
+    # initiates overall mixture
+    prpl_cs, f_sf, f_sa, f_ss, s_sf, s_sa, s_ss, f_stot, s_stot, n_per, n = mixture(u238, u235, boron, hw)
+    # outputs all needed atom totals and cross-sections
+    
     nenergy_initial = np.ones(count)
     
     neutron = neutrons(count, reactorradius, nenergy_initial) # initialize neutrons for monte carlo
     
+    # runs baseline_escape function with inputs, giving output counts returned below
     fcount, acount, scount, ecount = \
-        escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, prpl_cs, n) \
-    # runs overall function with inputs, giving outputs printed below
+        baseline_escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot, prpl_cs, n, reflectivity) \
     
     return fcount, acount, scount, ecount

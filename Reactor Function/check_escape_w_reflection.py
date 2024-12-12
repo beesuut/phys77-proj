@@ -13,7 +13,7 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
     dist = np.arange(0,count)
 
     # Calculates distance travelled before interaction using invCDF fuction and diffentiating between fast (Energy=1) and slow (Energy=0) neutrons
-    dist = np.array(list((map(lambda x:inv((np.random.uniform(0, 1)), n, f_stot) if neutron[2,0,int(x)] == 1 else inv((np.random.uniform(0, 1)), n, s_stot), dist))))    
+    dist = np.array(list((map(lambda x:inv((np.random.uniform(0, 1)), n, f_stot) if neutron[2,0,int(x)] == 1 else inv((np.random.uniform(0, 1)), n, s_stot), dist))))   
     # check if particle escapes
 
     neutron[0] = np.add(neutron[0], dist * neutron[1])  # change neutron position by dist in movement direction
@@ -25,7 +25,7 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
         if neutron[2,0,i] == 1: # if the neutron is a fast neutron
             if rad[i] <= reactorradius:  # particle didn't leave
                 prob = np.random.uniform(0, f_stot * (10**24))
-                if prob < f_ss * (10**24):  # probability of elastic collision 
+                if prob < f_ss * (10**24):  # probability of elastic collision
                     newneutrons[:, :, i] = neutron[:, :, i] # if the neutron scatters it must be simulated again
                     tempprob = np.random.uniform(0, np.sum(prpl_cs[:,2]))
                     if tempprob < (prpl_cs[:,2][1]+prpl_cs[:,2][0]): # probability of scattering off D20 or boron (uranium scatters dont effect energy of neutron)
@@ -36,11 +36,16 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
                 else: # fission occurs (neutron `gone`)
                     fcount += 1
             else:  # particle left reactor (neutron `gone`)
-                ecount += 1
+                anothertempprob = np.random.uniform(0, 1)
+                if anothertempprob < 0.5: # 1/2 the time, the neutron is reflected back into the reactor
+                    newneutrons[:, :, i] = neutron[:, :, i] # the neutron must be simulated again
+                    newneutrons[1,:,i] = [-x for x in newneutrons[1,:,i]] # the velocity is in the negative direction that it started out going in (rebounded)
+                else: # other 1/2 of the time the neutron escapes
+                    ecount += 1
         else: # the neutron is a slow neutron
             if rad[i] <= reactorradius:  # particle didn't leave
                 prob = np.random.uniform(0, s_stot * (10**24))
-                if prob < s_ss * (10**24):  # probability of elastic collision 
+                if prob < s_ss * (10**24):  # probability of elastic collision
                     newneutrons[:, :, i] = neutron[:, :, i] # if the neutron scatters it must be simulated again
                     scount += 1
                 elif prob < (s_ss + s_sa) * (10**24):  # probability of inelastic collision (neutron `gone`)
@@ -48,12 +53,17 @@ def escape(neutron, count, reactorradius, f_sa, f_ss, s_sa, s_ss, f_stot, s_stot
                 else: # fission occurs (neutron `gone`)
                     fcount += 1
             else:  # particle left reactor (neutron `gone`)
-                ecount += 1
+                anothertempprob = np.random.uniform(0, 1)
+                if anothertempprob < 0.5: # 1/2 the time, the neutron is reflected back into the reactor
+                    newneutrons[:, :, i] = neutron[:, :, i] # the neutron must be simulated again
+                    newneutrons[1,:,i] = [-x for x in newneutrons[1,:,i]] # the velocity is in the negative direction that it started out going in (rebounded)
+                else: # other 1/2 of the time the neutron escapes
+                    ecount += 1
 
     # re-run function for remaining neutrons from elastic collisions
     for i in range(np.size(newneutrons,axis=2)+1):
-        try :
-            while np.all(newneutrons[:,:,i]==0): # the while statement avoids slices being "skipped" over, also the try except is to avoid the error when the while fails
+        try : # the while statement avoids slices being "skipped" over, also the try except is to avoid the error when the while fails
+            while np.all(newneutrons[:,:,i]==0):
                 newneutrons = np.delete(newneutrons, i, axis=2)
         except:
             i +=1
