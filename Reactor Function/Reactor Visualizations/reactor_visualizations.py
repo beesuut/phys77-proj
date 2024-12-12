@@ -93,19 +93,23 @@ def criticality_enrichment(n):
     plt.savefig('criticality.png')
     plt.show()
 
-
-def antineutrinos(num, area):
-    prpl_cs, f_sf, f_sa, f_ss, s_sf, s_sa, s_ss, f_stot, s_stot, n_per, n = mixture(0.4, 0.1, 0, 0.5)
+# graphical function varying distance from the reactor to see resulting number of antineutrinos
+def antineutrinos(num, area): # inputs take the number neutrons being modeled and the area of the detector
+    prpl_cs, f_sf, f_sa, f_ss, s_sf, s_sa, s_ss, f_stot, s_stot, n_per, n = mixture(0.4, 0.1, 0, 0.5) # runs the regular code for some hard coded volume ratios
     fcount, acount, scount, ecount = reactor(num, 0.4, 0.1, 0, 0.5)
-    
+
+    # this function counts how many antineutrinos are made in total, calculated by multiplying the fissions by 6(assuming that the vast majority of fissions just come from U235
+    # and then multiplying 1.5 by the number of absorbtions for U238 and 235 (calculated approximately by taking what fraction of the cross-section they each are and multiplying that by total absorbtion)
+    # 1.5 because there are 2 and 1 antineutrinos for U329 and U236 decay chains respecively, and U235 and U238 have approximately the same absorbtion cross-sections
     antineutrinocount = 6*fcount+ 1.5*((prpl_cs[0,1] / np.sum(prpl_cs[:,1])) + (prpl_cs[1,1] / np.sum(prpl_cs[:,1]))+ (prpl_cs[0,3] / np.sum(prpl_cs[:,3]))+ (prpl_cs[1,3] / np.sum(prpl_cs[:,3])))/2
     
-    # for a 1 sq meter detector, this is how many antineutrinos will hit it
+    # for a 1 sq meter detector, this is how many antineutrinos will hit it, just an inverse square law as the sphere of emmited antineutrinos gets larger
     flux = []
     for r in range(1, 101):
         numberhit = (((np.arctan(np.sqrt(area)/(2*r)))**2)/np.pi)*antineutrinocount/2
         flux.append(numberhit)
-    
+
+    # make a pretty plot of the results!
     X = np.arange(1,101)
     plt.plot(X, flux, color = 'red')
     plt.title('Number of Antineutrinos incident on a detector - (with ' + str(area) + 'm^2 area)')
