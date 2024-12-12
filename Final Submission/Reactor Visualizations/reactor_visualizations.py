@@ -55,12 +55,12 @@ def boron(n):
     power = []
 
     # run through reactor function at "insertion" levels 1% of reactor volume to 75%
-    for i in range(1, 76):
+    for i in range(1, 51):
         fcount, acount, scount, ecount = reactor(n, 0.8*(1-0.01*i), 0.2*(1-0.01*i), 0.01*i, 0)
         power.append(fcount)
 
     # arrange percentages for x-axis
-    X = np.arange(1,76)
+    X = np.arange(1,51)
     
     plt.plot(X, power, color = 'red')    # graph control rod data
     plt.title('Boron Poisoning Reactor - (with ' + str(n) + ' neutrons, 20% enrichment)')
