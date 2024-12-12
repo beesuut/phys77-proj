@@ -67,5 +67,5 @@ def criticality_reflectivity(n, reactorradius):
     plt.xlabel('Radius of core, in cm')
     plt.ylabel('# of neutrons produced')
      
-    plt.savefig('criticality_radius_r.png')
+    plt.savefig('criticality_reflectivity_r.png')
     plt.show()
