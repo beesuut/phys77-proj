@@ -1,0 +1,130 @@
+\documentclass{notes}
+\graphicspath{{../Images/}}
+
+\fancyhead[l]{Capstone Project}
+\fancyhead[c]{Physics 77}
+\fancyhead[r]{December 3, 2024}
+\fancyfoot[c]{Page \thepage\ of \pageref{LastPage}}
+
+\begin{document}
+
+\section{What is Our Project?}
+
+\begin{enumerate}
+    \item Simulating a nuclear reactor using monte-carlo
+    \subitem Repeating random results to find a statistical output
+    \subitem \indicates No time dependence: actions happen in `ticks'
+\end{enumerate}
+
+\subsection{Assumptions}
+
+\begin{enumerate}
+    \item Reactive elements are in a homogenous mixture
+    \item Spherical reactor
+    \item Fissions do not release new neutrons
+    \subitem For simplicity: This event would cause a never-ending cycle of reactions because the fuel is assumed to be homogenous and unchanging in quantity
+\end{enumerate}
+
+\subsection{Inputs}
+
+\begin{enumerate}
+    \item Reactor Size
+    \item Neutrons
+    \subitem Position, Velocity, Energy (?)
+    \item Cross-sections
+\end{enumerate}
+
+\subsubsection{Cross-Sections}
+
+A varying `size' dependent on neutron energy and reactive element
+
+\indicates Determines probability of an event occurring
+
+Cross-sections are different for each event
+
+\subsubsection{Possible Events (And How They Are Processed)}
+
+Fission: The neutron collides with an atom with enough energy to create fission
+
+\tab \indicates The fission event is counted and the neutron is removed from the simulation
+
+Escape: The netron escapes the reactor
+
+\tab \indicates The escape event is counted and the neutron is removed from the simulation
+
+Absorption (Inelastic Collision): The neutron collides with an atom and sticks
+
+\tab \indicates The absorption event is counted and the neutron is removed from the simulation
+
+Scattering (Elastic Collision): The neutron bounces off an atom (and loses energy?)
+
+\tab \indicates The scattering event is counted and the neutron is run through the simulation recursively until escape (with lower energy?)
+
+\subsection{Outputs}
+
+Number of each event
+
+\begin{enumerate}
+    \item Fissions: Energy released, productivity of reactor
+    \item Escapes
+    \item Absorptions
+    \item Scattering
+\end{enumerate}
+
+\section{Project Flowchart}
+
+Initial conditions entered:
+
+\begin{enumerate}
+    \item Reactor Radius
+    \item Cross Sections
+    \item Number of Neutrons
+\end{enumerate}
+
+Neutrons `spawned' with a position, direction, and energy
+
+Time `ticked,' moving neutrons by an amount dictated by density function in the initialized direction
+
+Check what neutron does and perform recursion as necessary
+
+\section{Our Process}
+
+\subsection{Starting}
+
+We began with simulating a single neutron to test procedures
+
+Issues:
+
+\begin{enumerate}
+    \item Position and direction each had 3 separate variables
+    \item When neutron was randomly spawned, it was not always inside the reactor
+\end{enumerate}
+
+\subsection{First Monte-Carlo}
+
+We attempted to loop the single example `n' times but ran into an issue with creating many variables
+
+This was solved by turning the positions and velocities into a (2, 3) array
+
+\subsubsection{Issues}
+
+\begin{enumerate}
+    \item The neutrons still did not always spawn inside the reactor
+    \item Probability density functions were not equipped to be used as a random input to another function
+    \item Loops were too slow for large `n'
+    \item Escape tests extremely slow
+\end{enumerate}
+
+\subsection{Solving Issues}
+
+Speed: Neutrons were processed in a 3d array, removing the need for most loops
+
+Probability density functions tweaked to allow mapping into other variables (screenshot pls this was such an annoying function to write)
+
+Position: By taking the random variable (0, 1) as inputs and converting to spherical coordinates, the radius could always be kept within a sphere of 1 (screenshot this too)
+
+Escape: Testing final position (radius) sped up significantly using Frobenius norm \(\sqrt{x^2+y^2+z^2}\)
+
+\section{Extra Additions}
+
+\end{document}
