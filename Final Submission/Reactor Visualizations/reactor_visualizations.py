@@ -71,7 +71,7 @@ def boron(n):
     plt.show()
 
 # graphical function varying radius, in cm, to see resulting neutron output and compare to criticality threshold, with neutrons as an input
-def criticality_radius(n):
+def criticality_radius_nr(n):
 
     # initiate empty list to be filled with neutron outputs, ideally approaching chain reaction levels
     chain_reaction = []
