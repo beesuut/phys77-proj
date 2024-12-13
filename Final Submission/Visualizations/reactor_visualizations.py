@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from reactor_function import reactor
+from materials_mixture import mixture
 
 # graphical function varying enrichment levels of uranium to see resulting fission output, with neutron count as an input
 def enrichment(n):
