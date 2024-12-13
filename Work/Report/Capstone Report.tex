@@ -24,30 +24,30 @@ With the number of different events, several interesting physical properties of 
 Reaching our final design took several iterations, as multiple hurdles had to be overcome before we reached a workable model. This process saw us first simulating a single neutron, then turning this model into a crude Monte Carlo. As we worked towards a more polished model, we split our code into several interacting modules. These modules would first spawn a set number of neutrons into the simulation, process their interactions based on their cross-sections (probabilities), and produce counts of each event which occurred. These three modules, in order, may be referred to as the `neutrons' modeule (initialize\verb|_|neutrons), the `density' module (density\verb|_|functions), and the `escape' module (check\verb|_|escape). Finally a fourth `master' file would be used to bring each of these pieces together by initializing the reactor size, number of neutrons, the particular elements involved, and then running each of the other modules. This final file was labeled the `reactor' module (reactor\verb|_|function) in the final iteration.
 
 The second significant update put in much of the work to create cohesion between the modules. It updated the escape module so that event counters could be reset within the module itself, and created a consistently functional reactor module. A visualization module (reactor\verb|_|visualizations) module was also added, allowing for several graphical displays of input-output interactions. This ultimately helped us verify how realistic our reactor was, allowing us to visualize several known aspects of nuclear reactors as well as indicating places where there was room to improve our simulation. Many of the graphics from this visualization module will be shown in the results section below. Finally, upon noticing in our visualizations that our base reactor wasn't nearing criticality, we added a variation of our escape module that allowed for partial reflection (rather than escape), providing more realism as well as helping to demonstrate criticality.
-
+\newpage
 \subsubsection*{Code Walkthrough}
 
-\textbf{Neutrons Module}
+\ul{Neutrons Module}
 
-The neutron module creates a `neutrons' function which takes as inputs the number of neutrons (count), the reactor radius, and the energy of each neutron (array-like). Firstly, a (3, 3, count) array is initialized with random values between 0 and 1. Each neutron was represented by a slice along axis 2 and encoded an (x, y, z) position, direction, and an energy. The first row's random values (0-1) were used to give each neutron a randomized spherical coordinate which were then converted to Cartesian coordinates. The second row indicated the direction (x, y, z) the particle would travel, and was converted to unit length. The neutron energies (an input to the original function) would be placed in the position (2,0), with the final 2 positions in the array unused.
+The neutron module creates a `neutrons' function which takes as inputs the number of neutrons (count), the reactor radius, and the energy of each neutron (array-like). Firstly, a (3, 3, count) array is initialized with random values between 0 and 1. Each neutron was represented by a slice along axis 2 and encoded an (x, y, z) position, direction, and an energy. The first row's random values (0, 1) were used to give each neutron a randomized spherical coordinate which were then converted to Cartesian coordinates. The second row indicated the direction (x, y, z) the particle would travel, and was converted to unit length. The neutron energies (an input to the original function) would be placed in the position (2,0), with the final 2 positions in the array unused.
 
-\textbf{Mixtures Module}
+\ul{Mixtures Module}
 
 By unpacking and processing a csv file, we receive the cross-sectional information on uranium-238 \cite{Kim, Andersen}, uranium-235, boron-10 \cite{Bogart}, and heavy water \cite{CrossSections}. When initiating a `mixtures' function, we input percentage values of the total reactor volume to be taken up by each material. These volume percentages were converted to atomic percentages which was generally more useful for our calculations. These weighted densities allow us to show the probability of each event (fission, absorption, scattering) for both high- and low-energy neutrons. These new weighted cross-sections can then be used as inputs to our probability density function.
 
-\textbf{Density Module}
+\ul{Density Module}
 
 The density function was somewhat simpler. Firstly, the probability density function takes the number of particles and total cross section as inputs, outputting a function of `x'. The cumulative distribution function integrates over the pdf. By taking the inverse of the cdf and mapping onto it a random value (0, 1), we find the distance each particle will travel before experiencing an interaction. \cite{OpenMC}
 
-\textbf{Escape Module (No Reflection)}
+\ul{Escape Module (No Reflection)}
 
 The escape module creates a 1d array which, using the inverse cdf function, determines the distance each neutron will travel before an interaction. By moving the particle's position in the specified direction, it will receive a final position. If this position is outside the reactor, the neutron will have successfully escaped; otherwise it will perform a different event based on the probabilities taken from the mixtures module. In the case that the neutron scatters, its energy may be decreased and it will be run through the simulation recursively.
 
-\textbf{Reflective Shell}
+\ul{Reflective Shell}
 
-A variation of the escape module allowed neutrons to reflect off a wall rather than simply escaping. This was done probabilistically depending on a certain defined reflectivity. By making this change, our reactor was much more real-to-life and could reach a critical level.
+A variation of the escape module allowed neutrons to reflect off a wall rather than simply escaping. This was done probabilistically depending on an input reflectivity value. By making this change, our reactor was able to be much more real-to-life and could more easily reach critical levels.
 
-\textbf{Reactor File}
+\ul{Reactor File}
 
 The reactor file is the main file which gets run, calling each of the others as necessary. By having all the alterable variables in one place, it is very easy to run and see how changing inputs affect each of the simulated results.
 
@@ -57,13 +57,13 @@ Following the completion of our reactor simulation, we coded several visualizati
 
 \subsubsection*{Material Graphics}
 
-Material graphics focused on varying the percentages of our material inputs and seeing how our counters reacted.
+Material graphics (Figure 1) focused on varying the percentages of our material inputs and seeing how our counters reacted.
 
 Looking first at uranium percentages, we are able to demonstrate the impact of enrichment on fission by making a graphic which ran our simulation from 1\% enrichment (99\% U-238, 1\% U-235) to 100\% enrichment. This graph showed us that the largest gains stopped at 20\% but the number of fissions still continued to increase slowly. This matches quite well with real world use-cases, where the vertical lines on the graph separate natural uranium, reactor-grade uranium, and weapons-grade uranium.
 
 Our second material graphic sought to observe the impact of a moderator on the amount of scattering within the reactor. By varying the percentage of moderator (heavy water) from 1\% to 66\% (higher percentages would result in a non-reactive fuel), with 20\% enriched uranium, the increase was close to linear.
 
-For the last materials graphic, we could see the impact of control rod insertion on the reactivity of a reactor; how power plants `poison' their reactors to prevent meltdown. By varying the percentage of boron from 1-75\% against fission counts, the graphic showed a rapid decrease in fissions with increasing quantities of boron.
+For the last materials graphic, we could see the impact of control rod insertion on the reactivity of a reactor; how power plants `poison' their reactors to prevent meltdown. By varying the percentage of boron from 1\% to 75\% against fission counts, the graphic showed a rapid decrease in fissions with increasing quantities of boron.
 
 \begin{figure}[H]
     \centering
@@ -75,9 +75,9 @@ For the last materials graphic, we could see the impact of control rod insertion
 
 \subsubsection*{Criticality Graphics}
 
-Our first criticality graphic used the model without reflectivity and sought to test if criticality was possible with a sufficiently large reactor core. By starting with 1000 neutrons, we looked for the value of reactor radius where the number of neutrons produced from fission exceeded this initial amount, given that the average number of neutrons produced from each fission was 2.5.
+Our first criticality graphic (Figure 2a) used the model without reflectivity and sought to test if criticality was possible with a sufficiently large reactor core. By starting with 1000 neutrons, we looked for the value of reactor radius where the number of neutrons produced from fission exceeded this initial amount, given that the average number of neutrons produced from each fission was 2.5.
 
-Following this same process with a 50\% reflective shell showed that criticality could occur at a lower reactor radius if reflection was accounted for.
+Following this same process with a 50\% reflective shell (Figure 2b) showed that criticality could occur at a lower reactor radius if reflection was accounted for.
 
 \begin{figure}[H]
     \centering
@@ -86,7 +86,7 @@ Following this same process with a 50\% reflective shell showed that criticality
     \caption{Criticality without (left) and with (right) reflection}
 \end{figure}
 
-The last criticality graphics illustrated the ways in which enrichment and reflectivity impact reactivity. The first graphic varied the reflectivity (rather than the radius) and graphed against the number of neutrons produced.
+The last criticality graphics (Figure 3) illustrated the ways in which enrichment and reflectivity impact reactivity. The first graphic varied the reflectivity (rather than the radius) and graphed against the number of neutrons produced.
 
 Similarly, a second graph varied the number of neutrons produced by the level of uranium enrichment.
 
