@@ -62,9 +62,9 @@ def criticality_reflectivity(n, reactorradius):
     X = np.linspace(0.01, 1, 100)
     
     plt.plot(X, chain_reaction, color = 'red')     # graph neutron output data
-    plt.hlines(n, 0.1, 10, color = 'black', linestyle = '--')    # graph horizontal line indicating threshold for criticality based on input neutrons
+    plt.hlines(n, 0.01, 1, color = 'black', linestyle = '--')    # graph horizontal line indicating threshold for criticality based on input neutrons
     plt.title('Neutrons Produced From Fission - (with ' + str(n) + ' neutrons and a ' + str(reactorradius) + 'cm reactor)', fontsize = 8)
-    plt.xlabel('Radius of core, in cm')
+    plt.xlabel('Reflectivity of the core, from 0.01 to 1')
     plt.ylabel('# of neutrons produced')
      
     plt.savefig('criticality_reflectivity_r.png')
