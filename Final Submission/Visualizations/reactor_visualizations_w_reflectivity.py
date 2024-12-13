@@ -18,7 +18,7 @@ def criticality_enrichment(n, reflectivity, reactorradius):
     
     plt.plot(X, chain_reaction, color = 'red')    # graph neutron output data
     plt.hlines(n, 0, 100, color = 'black', linestyle = '--')    # graph horizontal line indicating threshold for criticality based on input neutrons
-    plt.title('Neutrons Produced From Fission - (with ' + str(n) + ' neutrons)')
+    plt.title('Neutrons Produced From Fission - (with ' + str(n) + ' neutrons, a ' + str(reactorradius) + 'cm reactor and ' + str(reflectivity) + ' reflectivity)', fontsize = 8)
     plt.xlabel('% of core that is U-235')
     plt.ylabel('# of neutrons produced')
     
@@ -41,7 +41,7 @@ def criticality_radius_r(n, reflectivity):
     
     plt.plot(X, chain_reaction, color = 'red')     # graph neutron output data
     plt.hlines(n, 0.1, 10, color = 'black', linestyle = '--')    # graph horizontal line indicating threshold for criticality based on input neutrons
-    plt.title('Neutrons Produced From Fission - (with ' + str(n) + ' neutrons and ' + str(reflectivity) + ' reflectivity)')
+    plt.title('Neutrons Produced From Fission - (with ' + str(n) + ' neutrons and ' + str(reflectivity) + ' reflectivity)', fontsize = 8)
     plt.xlabel('Radius of core, in cm')
     plt.ylabel('# of neutrons produced')
      
@@ -63,7 +63,7 @@ def criticality_reflectivity(n, reactorradius):
     
     plt.plot(X, chain_reaction, color = 'red')     # graph neutron output data
     plt.hlines(n, 0.1, 10, color = 'black', linestyle = '--')    # graph horizontal line indicating threshold for criticality based on input neutrons
-    plt.title('Neutrons Produced From Fission - (with ' + str(n) + ' neutrons)')
+    plt.title('Neutrons Produced From Fission - (with ' + str(n) + ' neutrons and a ' + str(reactorradius) + 'cm reactor)', fontsize = 8)
     plt.xlabel('Radius of core, in cm')
     plt.ylabel('# of neutrons produced')
      
