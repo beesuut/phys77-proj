@@ -21,9 +21,9 @@ With the number of different events, several interesting physical properties of 
 
 \subsubsection*{Our Process}
 
-Reaching our final desing took several iterations, as multiple hurdles had to be overcome before we reached a workable model. This process saw us first simulating a single neutron, turning this model into a crude Monte Carlo. As we worked towards a more polished model, we split our code into several interacting modules. These modules would first spawn a set number of neutrons into the simulation, process their interactions based on their cross-sections (probabilities), and produce counts of each event which occurred. These three modules, in order, may be referred to as the `neutrons' modeule (initialize\textunderscore neutrons), the `density' module (density\textunderscore functions), and the `escape' module (check\textunderscore escape). Finally a fourth `master' file would be used to bring each of these pieces together by initializing the reactor size, number of neutrons, the particular elements involved, and then running each of the other modules. This final file was labeled the `reactor' module (reactor\textunderscore function) in the final iteration.
+Reaching our final desing took several iterations, as multiple hurdles had to be overcome before we reached a workable model. This process saw us first simulating a single neutron, turning this model into a crude Monte Carlo. As we worked towards a more polished model, we split our code into several interacting modules. These modules would first spawn a set number of neutrons into the simulation, process their interactions based on their cross-sections (probabilities), and produce counts of each event which occurred. These three modules, in order, may be referred to as the `neutrons' modeule (initialize\verb|_|neutrons), the `density' module (density\verb|_|functions), and the `escape' module (check\verb|_|escape). Finally a fourth `master' file would be used to bring each of these pieces together by initializing the reactor size, number of neutrons, the particular elements involved, and then running each of the other modules. This final file was labeled the `reactor' module (reactor\verb|_|function) in the final iteration.
 
-The second significant update put in much of the work to create cohesion between the modules. It updated the escape module so that event counters could be reset within the module itself, and created a consistently functional reactor module that, with the number of neutrons and mixture inputs alone, could output event counters by running through the entire simulation. A visualization module (reactor\textunderscore visualizations) module was also added, allowing for several graphical displays of input-output interactions. This ultimately helped us verify how realistic our reactor was, allowing us to visualize several known aspects of nuclear reactors as well as indicating places where there was room to improve our simulation. Many of the graphics from this visualization module will be shown in the results section below. Finally, upon noticing in our visualizations that our base reactor wasn't nearing criticality, we added a variation of our escape module that allowed for partial reflection (rather than escape), providing more realism as well as demonstrating criticality.
+The second significant update put in much of the work to create cohesion between the modules. It updated the escape module so that event counters could be reset within the module itself, and created a consistently functional reactor module. A visualization module (reactor\verb|_|visualizations) module was also added, allowing for several graphical displays of input-output interactions. This ultimately helped us verify how realistic our reactor was, allowing us to visualize several known aspects of nuclear reactors as well as indicating places where there was room to improve our simulation. Many of the graphics from this visualization module will be shown in the results section below. Finally, upon noticing in our visualizations that our base reactor wasn't nearing criticality, we added a variation of our escape module that allowed for partial reflection (rather than escape), providing more realism as well as demonstrating criticality.
 
 \subsubsection*{Code Walkthrough}
 
@@ -37,7 +37,7 @@ By unpacking and processing a csv file, we receive the cross-sectional informati
 
 \textbf{Density Module}
 
-The density function was somewhat simpler. Firstly, the probability density function takes the number of particles and total cross section as inputs, outputting a function of `x'. The cumulative distribution function integrates over the pdf. By taking the inverse of the cdf and mapping onto it a random value (0, 1), we find the distance each particle will travel before experienceing an interaction. \cite{OpenMC}
+The density function was somewhat simpler. Firstly, the probability density function takes the number of particles and total cross section as inputs, outputting a function of `x'. The cumulative distribution function integrates over the pdf. By taking the inverse of the cdf and mapping onto it a random value (0, 1), we find the distance each particle will travel before experiencing an interaction. \cite{OpenMC}
 
 \textbf{Escape Module (No Reflection)}
 
@@ -45,21 +45,21 @@ The escape module creates a 1d array which, using the inverse cdf function, dete
 
 \textbf{Reflective Shell}
 
-A variation of the escape module allowed neutrons to reflect off a wall rather than simply escaping. This was done probabilistically depending on a certain reflectivity which could be changed. By making this change, our reactor was much more real-to-life and could reach criticality.
+A variation of the escape module allowed neutrons to reflect off a wall rather than simply escaping. This was done probabilistically depending on a certain defined reflectivity. By making this change, our reactor was much more real-to-life and could reach a critical level.
 
 \textbf{Reactor File}
 
-The reactor file is the main file which gets run, calling each of the others as necessary. By having all the alterable variables in one place, it is very easy to run and see how changes in input affect the simulated results.
+The reactor file is the main file which gets run, calling each of the others as necessary. By having all the alterable variables in one place, it is very easy to run and see how changes in input affect each of the simulated results.
 
 \subsection*{Results}
 
-Following the completion of our reactor simulation, we coded several visualization functions focused specifically on generating graphs. These visualized how our simulation reacted to shifting input variables and can be brouadly categorized into two groups: material and criticality graphics.
+Following the completion of our reactor simulation, we coded several visualization functions focused specifically on generating graphs. These visualized how our simulation reacted to shifting input variables and can be broadly categorized into two groups: material and criticality graphics.
 
 \subsubsection*{Material Graphics}
 
 Material graphics focused on varying the percentages of our material inputs and seeing how our counters reacted.
 
-Looking first at uranium percentages, we are able to demonstrate the impact of enrichment of fission by making a graphic which ran our simulation from 1\% enrichment (99\% U-238, 1\% U-235) to 100\% enrichment. This graph showed us that the largest gains stopped at 20\% but the number of fissions still continued to increase slowly. This matches perfectly with real world use-cases, where the vertical lines on the graph separate natural uranium, reactor-grade uranium, and weapons-grade uranium.
+Looking first at uranium percentages, we are able to demonstrate the impact of enrichment on fission by making a graphic which ran our simulation from 1\% enrichment (99\% U-238, 1\% U-235) to 100\% enrichment. This graph showed us that the largest gains stopped at 20\% but the number of fissions still continued to increase slowly. This matches perfectly with real world use-cases, where the vertical lines on the graph separate natural uranium, reactor-grade uranium, and weapons-grade uranium.
 
 Our second material graphic sought to observe the impact of a moderator on the amount of scattering within the reactor. By varying the percentage of moderator (heavy water) from 1-66\% (higher percentages would result in a non-reactive fuel), with 20\% enriched uranium, the increase was close to linear.
 
@@ -77,7 +77,7 @@ For the last materials graphic, we could see the impact of control rod insertion
 
 Our first criticality graphic used the model without reflectivity and sought to test if criticality was possible with a sufficiently large reactor core. By starting with 1000 neutrons, we looked for the value of reactor radius where the number of neutrons produced from fission exceeded this initial amount, given that the average number of neutrons produced from each fission was 2.5.
 
-Following this same process with a 50\% reflective shell showed that criticality could occur at a lower reactor radius with reflection.
+Following this same process with a 50\% reflective shell showed that criticality could occur at a lower reactor radius if reflection was accounted for.
 
 \begin{figure}[H]
     \centering
@@ -86,7 +86,7 @@ Following this same process with a 50\% reflective shell showed that criticality
     \caption{Criticality without (left) and with (right) reflection}
 \end{figure}
 
-The last criticality graphics observed how enrichment and reflectivity impact reactivity. The first graphic for reflectivity varied the reflectivity (rather than the radius) and graphed against the number of neutrons produced.
+The last criticality graphics illustrated the ways in which enrichment and reflectivity impact reactivity. The first graphic varied the reflectivity (rather than the radius) and graphed against the number of neutrons produced.
 
 Similarly, a second graph varied the number of neutrons produced by the level of uranium enrichment.
 
@@ -101,9 +101,9 @@ Similarly, a second graph varied the number of neutrons produced by the level of
 
 Looking at our graphical results, we see much to indicate the quality of simulation, particularly in its accuracy reflecting the mechanisms and characteristics of real-world reactors. 
 
-One particularly notable example is in the enrichment of uranium. Unenriched uranium, in the 1-5\% range, is clearly much worse for fusion, improving quickly through the 5-20\% reactor-grade enrichment. At higher levels of enrichment, the rate of return diminishes but is still non-negligible. This matches the idea that reactor-grade uranium attempts to be efficent while cost effective. However for weapons, which intend maximum yield, it is sensible to use highly enriched uranium.
+One particularly notable example is in the enrichment of uranium. Unenriched uranium, in the 1-5\% range, is clearly much worse for fusion, improving quickly through the 5-20\% reactor-grade enrichment. At higher levels of enrichment, the rate of return diminishes but is still non-negligible. This matches the idea that reactor-grade uranium attempts to be efficient while cost effective. However for weapons, which intend maximum yield, it is sensible to use highly enriched uranium.
 
-Our control rod graph shows, unsurprisingly, that more rods leads to a decrease in fissions. Excitingly, our reactor showed that 10\% boron pushes fission rates to near-zero: very close to the 5-10\% of volume in real reactors to kill a reaction.
+Our control rod graph shows, unsurprisingly, that more rods leads to a decrease in fissions. Excitingly, our reactor showed that 10\% boron pushes fission rates to near-zero: very close to the 5-10\% of volume used in real reactors to kill a reaction.
 
 Our criticality graphs show that size, enrichment, and reflection all increase the potential for a critical reactor. This is necessary for energy production, but also demonstrates how dangerous reactors can be without mechanisms for moderation, leading to the possibiliity of going supercritical.
 
@@ -113,9 +113,9 @@ For small volumes, we saw that an open system was `safe,' however once reflectio
 
 Overall, this simulation was very effective in what we set out to achieve. We saw the expected trends that should be seen, despite various assumptions made during the process of programming the simulation.
 
-If we wanted a more accurate model, there are a few directions which could significantly expand the project's scope. One such task would be using neutrons that are born with some distribution acros the `fast' energy regime and having unique energy loss from different scattering events. This would involve new cross-sections as well as likely certain numerical integration problems due to the cumulative distribution function. Other improvements might include adding time-dependence which, along with computational power, would require an inclusion of components like fuel burnup, temperature, and fission products. Finally, we might model real reactor and control rod geometries rather than assuming homogeneity.
+Throughout our process, the use of matricies and function mapping rather than loops led to significant speed improvements. As a group our work on the physics, code, presentation, and write-up were well balanced, as we learned to work individually as well as combining our efforts. One area we could improve is working in parallel on different tasks by separating modules early. What we did instead was work on the ideas sequentially and separated only for reasons of organization, leading to a slower group workflow.
 
-Throughout our process, the use of matricies and function mapping rather than loops led to significant speed improvements. As a group our work on the physics, code, presentation, and write-up were well balanced, learning how to work individually as well as combining our efforts. One area we might've improved was working in parallel on different tasks by separating modules early. What we did instead was work on the ideas sequentially and separated only for reasons of organization, leading to a slower group workflow.
+If we wanted a more accurate model, there are a few directions which could significantly expand the project's scope. One such task would be using neutrons that are born with some distribution acros the `fast' energy regime and having unique energy loss from different scattering events. This would involve new cross-sections as well as certain numerical integration problems due to the cumulative distribution function. Another improvement might be to include time-dependence which, along with computational power, would require an inclusion of components such as fuel burnup, temperature, and fission products. Finally, we might model real reactor and control rod geometries rather than assuming homogeneity.
 
 \nocite{*}
 \bibliography{Capstone_Citations}
