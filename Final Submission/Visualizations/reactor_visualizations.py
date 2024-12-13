@@ -113,7 +113,7 @@ def antineutrinos(num, area): # inputs take the number neutrons being modeled an
     # make a pretty plot of the results!
     X = np.arange(1,101)
     plt.plot(X, flux, color = 'red')
-    plt.title('Number of Antineutrinos incident on a detector - (with ' + str(area) + 'm^2 area)')
+    plt.title('Number of Antineutrinos incident on a detector - (with ' + str(area) + 'm^2 area and ' + str(num) +' neutrons)', fontsize = 10)
     plt.xlabel('Distance from reactor (Meters)')
     plt.ylabel('# of Antineutrinos detected')
     plt.savefig('Neutrinos.png')
